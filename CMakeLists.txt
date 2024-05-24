@@ -44,8 +44,8 @@ if (CB_V2G_INSTALL)
     )
 
     evc_setup_package(
-        NAME everest-cb_v2g
-        NAMESPACE everest
+        NAME cb_v2g
+        NAMESPACE cb_v2g
         EXPORT cb_v2g-targets
     )
 endif()
