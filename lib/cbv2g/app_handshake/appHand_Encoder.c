@@ -24,7 +24,7 @@
 #include "cbv2g/common/exi_error_codes.h"
 #include "cbv2g/common/exi_header.h"
 #include "cbv2g/app_handshake/appHand_Datatypes.h"
-
+#include "cbv2g/app_handshake/appHand_Encoder.h"
 
 
 static int encode_appHand_AppProtocolType(exi_bitstream_t* stream, const struct appHand_AppProtocolType* AppProtocolType);

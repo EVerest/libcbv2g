@@ -409,7 +409,7 @@ static int encode_iso2_TransformsType(exi_bitstream_t* stream, const struct iso2
             break;
         case 8:
             // Grammar: ID=8; read/write bits=2; START (Transform), END Element
-            if (1 == 0)
+            if (1 == 0) // What's going on here?
             {
                 error = exi_basetypes_encoder_nbit_uint(stream, 2, 0);
                 if (error == EXI_ERROR__NO_ERROR)
@@ -5651,7 +5651,7 @@ static int encode_iso2_SignatureType(exi_bitstream_t* stream, const struct iso2_
             break;
         case 121:
             // Grammar: ID=121; read/write bits=2; START (Object), END Element
-            if (1 == 0)
+            if (1 == 0) // Whats going on here?
             {
                 error = exi_basetypes_encoder_nbit_uint(stream, 2, 0);
                 if (error == EXI_ERROR__NO_ERROR)
@@ -5703,7 +5703,7 @@ static int encode_iso2_SignatureType(exi_bitstream_t* stream, const struct iso2_
             break;
         case 123:
             // Grammar: ID=123; read/write bits=2; START (Object), END Element
-            if (1 == 0)
+            if (1 == 0) // What's going on here?
             {
                 error = exi_basetypes_encoder_nbit_uint(stream, 2, 0);
                 if (error == EXI_ERROR__NO_ERROR)
@@ -16739,7 +16739,7 @@ int encode_iso2_exiFragment(exi_bitstream_t* stream, struct iso2_exiFragment* ex
     if (error == EXI_ERROR__NO_ERROR)
     {
         // AC_EVChargeParameter (urn:iso:15118:2:2013:MsgDataTypes)
-        if (0 == 1)
+        if (0 == 1) // What's going on here?
         {
             error = EXI_ERROR__NOT_IMPLEMENTED_YET;
         }

@@ -26,8 +26,8 @@
 #include "cbv2g/common/exi_header.h"
 #include "cbv2g/common/exi_types_decoder.h"
 #include "cbv2g/app_handshake/appHand_Datatypes.h"
-
-
+#include "cbv2g/app_handshake/appHand_Decoder.h"
+#include "cbv2g/app_handshake/appHand_Encoder.h"
 
 static int decode_appHand_AppProtocolType(exi_bitstream_t* stream, struct appHand_AppProtocolType* AppProtocolType);
 static int decode_appHand_supportedAppProtocolReq(exi_bitstream_t* stream, struct appHand_supportedAppProtocolReq* supportedAppProtocolReq);
