@@ -56,8 +56,6 @@ extern "C" {
 #define iso2_MimeType_CHARACTER_SIZE (EXI_STRING_MAX_LEN + ASCII_EXTRA_CHAR)
 #define iso2_EnergyTransferModeType_6_ARRAY_SIZE (6)
 #define iso2_FaultMsg_CHARACTER_SIZE (64 + ASCII_EXTRA_CHAR)
-#define iso2_paymentOptionType_2_ARRAY_SIZE (2)
-#define iso2_SelectedServiceType_16_ARRAY_SIZE (16)
 #define iso2_CostType_3_ARRAY_SIZE (3)
 #define iso2_ConsumptionCostType_3_ARRAY_SIZE (3)
 #define iso2_Name_CHARACTER_SIZE (EXI_STRING_MAX_LEN + ASCII_EXTRA_CHAR)
@@ -66,21 +64,23 @@ extern "C" {
 #define iso2_SalesTariffDescription_CHARACTER_SIZE (32 + ASCII_EXTRA_CHAR)
 #define iso2_SalesTariffEntryType_12_ARRAY_SIZE (12)
 #define iso2_ParameterType_16_ARRAY_SIZE (16)
-#define iso2_MeterID_CHARACTER_SIZE (32 + ASCII_EXTRA_CHAR)
-#define iso2_sigMeterReadingType_BYTES_SIZE (64)
-#define iso2_ProfileEntryType_24_ARRAY_SIZE (24)
-#define iso2_ParameterSetType_5_ARRAY_SIZE (5)
-#define iso2_SAScheduleTupleType_3_ARRAY_SIZE (3)
+#define iso2_SelectedServiceType_16_ARRAY_SIZE (16)
 #define iso2_X509IssuerSerialType_5_ARRAY_SIZE (5)
+#define iso2_paymentOptionType_2_ARRAY_SIZE (2)
+#define iso2_ParameterSetType_5_ARRAY_SIZE (5)
+#define iso2_ProfileEntryType_24_ARRAY_SIZE (24)
+#define iso2_SAScheduleTupleType_3_ARRAY_SIZE (3)
 #define iso2_ContractSignatureEncryptedPrivateKeyType_BYTES_SIZE (EXI_BYTE_ARRAY_MAX_LEN)
 #define iso2_ServiceType_8_ARRAY_SIZE (8)
 #define iso2_DiffieHellmanPublickeyType_BYTES_SIZE (EXI_BYTE_ARRAY_MAX_LEN)
+#define iso2_MeterID_CHARACTER_SIZE (32 + ASCII_EXTRA_CHAR)
+#define iso2_sigMeterReadingType_BYTES_SIZE (64)
 #define iso2_CONTENT_CHARACTER_SIZE (EXI_STRING_MAX_LEN + ASCII_EXTRA_CHAR)
 #define iso2_sessionIDType_BYTES_SIZE (8)
-#define iso2_EVSEID_CHARACTER_SIZE (37 + ASCII_EXTRA_CHAR)
+#define iso2_evccIDType_BYTES_SIZE (6)
 #define iso2_genChallengeType_BYTES_SIZE (16)
 #define iso2_eMAID_CHARACTER_SIZE (15 + ASCII_EXTRA_CHAR)
-#define iso2_evccIDType_BYTES_SIZE (6)
+#define iso2_EVSEID_CHARACTER_SIZE (37 + ASCII_EXTRA_CHAR)
 
 
 // enum for function numbers
@@ -183,12 +183,13 @@ typedef enum {
     iso2_faultCodeType_UnknownError = 2
 } iso2_faultCodeType;
 
-// Element: definition=enum; name={urn:iso:15118:2:2013:MsgDataTypes}PaymentOption; type={urn:iso:15118:2:2013:MsgDataTypes}paymentOptionType; base type=string; content type=simple;
+// Element: definition=enum; name={urn:iso:15118:2:2013:MsgDataTypes}EVSENotification; type={urn:iso:15118:2:2013:MsgDataTypes}EVSENotificationType; base type=string; content type=simple;
 //          abstract=False; final=False; derivation=restriction;
 typedef enum {
-    iso2_paymentOptionType_Contract = 0,
-    iso2_paymentOptionType_ExternalPayment = 1
-} iso2_paymentOptionType;
+    iso2_EVSENotificationType_None = 0,
+    iso2_EVSENotificationType_StopCharging = 1,
+    iso2_EVSENotificationType_ReNegotiation = 2
+} iso2_EVSENotificationType;
 
 // Element: definition=enum; name={urn:iso:15118:2:2013:MsgDataTypes}EVErrorCode; type={urn:iso:15118:2:2013:MsgDataTypes}DC_EVErrorCodeType; base type=string; content type=simple;
 //          abstract=False; final=False; derivation=restriction;
@@ -206,14 +207,6 @@ typedef enum {
     iso2_DC_EVErrorCodeType_FAILED_ChargingSystemIncompatibility = 10,
     iso2_DC_EVErrorCodeType_NoData = 11
 } iso2_DC_EVErrorCodeType;
-
-// Element: definition=enum; name={urn:iso:15118:2:2013:MsgDataTypes}EVSENotification; type={urn:iso:15118:2:2013:MsgDataTypes}EVSENotificationType; base type=string; content type=simple;
-//          abstract=False; final=False; derivation=restriction;
-typedef enum {
-    iso2_EVSENotificationType_None = 0,
-    iso2_EVSENotificationType_StopCharging = 1,
-    iso2_EVSENotificationType_ReNegotiation = 2
-} iso2_EVSENotificationType;
 
 // Element: definition=enum; name={urn:iso:15118:2:2013:MsgDataTypes}Unit; type={urn:iso:15118:2:2013:MsgDataTypes}unitSymbolType; base type=string; content type=simple;
 //          abstract=False; final=False; derivation=restriction;
@@ -236,15 +229,6 @@ typedef enum {
     iso2_isolationLevelType_Fault = 3,
     iso2_isolationLevelType_No_IMD = 4
 } iso2_isolationLevelType;
-
-// Element: definition=enum; name={urn:iso:15118:2:2013:MsgDataTypes}ServiceCategory; type={urn:iso:15118:2:2013:MsgDataTypes}serviceCategoryType; base type=string; content type=simple;
-//          abstract=False; final=False; derivation=restriction;
-typedef enum {
-    iso2_serviceCategoryType_EVCharging = 0,
-    iso2_serviceCategoryType_Internet = 1,
-    iso2_serviceCategoryType_ContractCertificate = 2,
-    iso2_serviceCategoryType_OtherCustom = 3
-} iso2_serviceCategoryType;
 
 // Element: definition=enum; name={urn:iso:15118:2:2013:MsgDataTypes}EVSEStatusCode; type={urn:iso:15118:2:2013:MsgDataTypes}DC_EVSEStatusCodeType; base type=string; content type=simple;
 //          abstract=False; final=False; derivation=restriction;
@@ -294,6 +278,20 @@ typedef enum {
     iso2_responseCodeType_FAILED_CertificateRevoked = 25
 } iso2_responseCodeType;
 
+// Element: definition=enum; name={urn:iso:15118:2:2013:MsgBody}ChargingSession; type={urn:iso:15118:2:2013:MsgDataTypes}chargingSessionType; base type=string; content type=simple;
+//          abstract=False; final=False; derivation=restriction;
+typedef enum {
+    iso2_chargingSessionType_Terminate = 0,
+    iso2_chargingSessionType_Pause = 1
+} iso2_chargingSessionType;
+
+// Element: definition=enum; name={urn:iso:15118:2:2013:MsgBody}SelectedPaymentOption; type={urn:iso:15118:2:2013:MsgDataTypes}paymentOptionType; base type=string; content type=simple;
+//          abstract=False; final=False; derivation=restriction;
+typedef enum {
+    iso2_paymentOptionType_Contract = 0,
+    iso2_paymentOptionType_ExternalPayment = 1
+} iso2_paymentOptionType;
+
 // Element: definition=enum; name={urn:iso:15118:2:2013:MsgBody}ChargeProgress; type={urn:iso:15118:2:2013:MsgDataTypes}chargeProgressType; base type=string; content type=simple;
 //          abstract=False; final=False; derivation=restriction;
 typedef enum {
@@ -302,12 +300,14 @@ typedef enum {
     iso2_chargeProgressType_Renegotiate = 2
 } iso2_chargeProgressType;
 
-// Element: definition=enum; name={urn:iso:15118:2:2013:MsgBody}ChargingSession; type={urn:iso:15118:2:2013:MsgDataTypes}chargingSessionType; base type=string; content type=simple;
+// Element: definition=enum; name={urn:iso:15118:2:2013:MsgBody}ServiceCategory; type={urn:iso:15118:2:2013:MsgDataTypes}serviceCategoryType; base type=string; content type=simple;
 //          abstract=False; final=False; derivation=restriction;
 typedef enum {
-    iso2_chargingSessionType_Terminate = 0,
-    iso2_chargingSessionType_Pause = 1
-} iso2_chargingSessionType;
+    iso2_serviceCategoryType_EVCharging = 0,
+    iso2_serviceCategoryType_Internet = 1,
+    iso2_serviceCategoryType_ContractCertificate = 2,
+    iso2_serviceCategoryType_OtherCustom = 3
+} iso2_serviceCategoryType;
 
 // Element: definition=enum; name={urn:iso:15118:2:2013:MsgBody}RequestedEnergyTransferMode; type={urn:iso:15118:2:2013:MsgDataTypes}EnergyTransferModeType; base type=string; content type=simple;
 //          abstract=False; final=False; derivation=restriction;
@@ -448,7 +448,7 @@ struct iso2_X509IssuerSerialType {
         uint16_t charactersLen;
     } X509IssuerName;
     // X509SerialNumber, integer (base: decimal)
-    int32_t X509SerialNumber;
+    exi_signed_t X509SerialNumber;
 
 };
 
@@ -531,7 +531,7 @@ struct iso2_SignatureMethodType {
         uint16_t charactersLen;
     } Algorithm;
     // HMACOutputLength, HMACOutputLengthType (base: integer)
-    int32_t HMACOutputLength;
+    exi_signed_t HMACOutputLength;
     unsigned int HMACOutputLength_isUsed:1;
     // ANY, anyType (base: base64Binary)
     struct {
@@ -760,6 +760,18 @@ struct iso2_SignedInfoType {
     } Reference;
 };
 
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}SelectedService; type={urn:iso:15118:2:2013:MsgDataTypes}SelectedServiceType; base type=; content type=ELEMENT-ONLY;
+//          abstract=False; final=False;
+// Particle: ServiceID, serviceIDType (1, 1); ParameterSetID, short (0, 1);
+struct iso2_SelectedServiceType {
+    // ServiceID, serviceIDType (base: unsignedShort)
+    uint16_t ServiceID;
+    // ParameterSetID, short (base: int)
+    int16_t ParameterSetID;
+    unsigned int ParameterSetID_isUsed:1;
+
+};
+
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}Service; type={urn:iso:15118:2:2013:MsgDataTypes}ServiceType; base type=; content type=ELEMENT-ONLY;
 //          abstract=False; final=False;
 // Particle: ServiceID, serviceIDType (1, 1); ServiceName, serviceNameType (0, 1); ServiceCategory, serviceCategoryType (1, 1); ServiceScope, serviceScopeType (0, 1); FreeService, boolean (1, 1);
@@ -782,18 +794,6 @@ struct iso2_ServiceType {
     unsigned int ServiceScope_isUsed:1;
     // FreeService, boolean
     int FreeService;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}SelectedService; type={urn:iso:15118:2:2013:MsgDataTypes}SelectedServiceType; base type=; content type=ELEMENT-ONLY;
-//          abstract=False; final=False;
-// Particle: ServiceID, serviceIDType (1, 1); ParameterSetID, short (0, 1);
-struct iso2_SelectedServiceType {
-    // ServiceID, serviceIDType (base: unsignedShort)
-    uint16_t ServiceID;
-    // ParameterSetID, short (base: int)
-    int16_t ParameterSetID;
-    unsigned int ParameterSetID_isUsed:1;
 
 };
 
@@ -956,7 +956,7 @@ struct iso2_NotificationType {
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}DC_EVSEStatus; type={urn:iso:15118:2:2013:MsgDataTypes}DC_EVSEStatusType; base type=EVSEStatusType; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}DC_EVSEStatus; type={urn:iso:15118:2:2013:MsgDataTypes}DC_EVSEStatusType; base type=EVSEStatusType; content type=ELEMENT-ONLY;
 //          abstract=False; final=False; derivation=extension;
 // Particle: NotificationMaxDelay, unsignedShort (1, 1); EVSENotification, EVSENotificationType (1, 1); EVSEIsolationStatus, isolationLevelType (0, 1); EVSEStatusCode, DC_EVSEStatusCodeType (1, 1);
 struct iso2_DC_EVSEStatusType {
@@ -969,28 +969,6 @@ struct iso2_DC_EVSEStatusType {
     unsigned int EVSEIsolationStatus_isUsed:1;
     // EVSEStatusCode, DC_EVSEStatusCodeType (base: string)
     iso2_DC_EVSEStatusCodeType EVSEStatusCode;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SAProvisioningCertificateChain; type={urn:iso:15118:2:2013:MsgDataTypes}CertificateChainType; base type=; content type=ELEMENT-ONLY;
-//          abstract=False; final=False;
-// Particle: Id, ID (0, 1); Certificate, certificateType (1, 1); SubCertificates, SubCertificatesType (0, 1);
-struct iso2_CertificateChainType {
-    // Attribute: Id, ID (base: NCName)
-    struct {
-        char characters[iso2_Id_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } Id;
-    unsigned int Id_isUsed:1;
-    // Certificate, certificateType (base: base64Binary)
-    struct {
-        uint8_t bytes[iso2_certificateType_BYTES_SIZE];
-        uint16_t bytesLen;
-    } Certificate;
-
-    // SubCertificates, SubCertificatesType
-    struct iso2_SubCertificatesType SubCertificates;
-    unsigned int SubCertificates_isUsed:1;
 
 };
 
@@ -1022,52 +1000,7 @@ struct iso2_EVSEStatusType {
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentOptionList; type={urn:iso:15118:2:2013:MsgDataTypes}PaymentOptionListType; base type=; content type=ELEMENT-ONLY;
-//          abstract=False; final=False;
-// Particle: PaymentOption, paymentOptionType (1, 2);
-struct iso2_PaymentOptionListType {
-    // PaymentOption, paymentOptionType (base: string)
-    struct {
-        iso2_paymentOptionType array[iso2_paymentOptionType_2_ARRAY_SIZE];
-        uint16_t arrayLen;
-    } PaymentOption;
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SelectedServiceList; type={urn:iso:15118:2:2013:MsgDataTypes}SelectedServiceListType; base type=; content type=ELEMENT-ONLY;
-//          abstract=False; final=False;
-// Particle: SelectedService, SelectedServiceType (1, 16);
-struct iso2_SelectedServiceListType {
-    // SelectedService, SelectedServiceType
-    struct {
-        struct iso2_SelectedServiceType array[iso2_SelectedServiceType_16_ARRAY_SIZE];
-        uint16_t arrayLen;
-    } SelectedService;
-};
-
-// Element: definition=complex; name={http://www.w3.org/2000/09/xmldsig#}Signature; type={http://www.w3.org/2000/09/xmldsig#}SignatureType; base type=; content type=ELEMENT-ONLY;
-//          abstract=False; final=False;
-// Particle: Id, ID (0, 1); SignedInfo, SignedInfoType (1, 1); SignatureValue, SignatureValueType (1, 1); KeyInfo, KeyInfoType (0, 1); Object, ObjectType (0, 1);
-struct iso2_SignatureType {
-    // Attribute: Id, ID (base: NCName)
-    struct {
-        char characters[iso2_Id_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } Id;
-    unsigned int Id_isUsed:1;
-    // SignedInfo, SignedInfoType
-    struct iso2_SignedInfoType SignedInfo;
-    // SignatureValue, SignatureValueType (base: base64Binary)
-    struct iso2_SignatureValueType SignatureValue;
-    // KeyInfo, KeyInfoType
-    struct iso2_KeyInfoType KeyInfo;
-    unsigned int KeyInfo_isUsed:1;
-    // Object, ObjectType
-    struct iso2_ObjectType Object;
-    unsigned int Object_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}EVSEPresentVoltage; type={urn:iso:15118:2:2013:MsgDataTypes}PhysicalValueType; base type=; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}EVTargetCurrent; type={urn:iso:15118:2:2013:MsgDataTypes}PhysicalValueType; base type=; content type=ELEMENT-ONLY;
 //          abstract=False; final=False;
 // Particle: Multiplier, unitMultiplierType (1, 1); Unit, unitSymbolType (1, 1); Value, short (1, 1);
 struct iso2_PhysicalValueType {
@@ -1200,6 +1133,19 @@ struct iso2_SalesTariffType {
     } SalesTariffEntry;
 };
 
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}ParameterSet; type={urn:iso:15118:2:2013:MsgDataTypes}ParameterSetType; base type=; content type=ELEMENT-ONLY;
+//          abstract=False; final=False;
+// Particle: ParameterSetID, short (1, 1); Parameter, ParameterType (1, 16);
+struct iso2_ParameterSetType {
+    // ParameterSetID, short (base: int)
+    int16_t ParameterSetID;
+    // Parameter, ParameterType
+    struct {
+        struct iso2_ParameterType array[iso2_ParameterType_16_ARRAY_SIZE];
+        uint16_t arrayLen;
+    } Parameter;
+};
+
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}ProfileEntry; type={urn:iso:15118:2:2013:MsgDataTypes}ProfileEntryType; base type=; content type=ELEMENT-ONLY;
 //          abstract=False; final=False;
 // Particle: ChargingProfileEntryStart, unsignedInt (1, 1); ChargingProfileEntryMaxPower, PhysicalValueType (1, 1); ChargingProfileEntryMaxNumberOfPhasesInUse, maxNumPhasesType (0, 1);
@@ -1212,19 +1158,6 @@ struct iso2_ProfileEntryType {
     int8_t ChargingProfileEntryMaxNumberOfPhasesInUse;
     unsigned int ChargingProfileEntryMaxNumberOfPhasesInUse_isUsed:1;
 
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}ParameterSet; type={urn:iso:15118:2:2013:MsgDataTypes}ParameterSetType; base type=; content type=ELEMENT-ONLY;
-//          abstract=False; final=False;
-// Particle: ParameterSetID, short (1, 1); Parameter, ParameterType (1, 16);
-struct iso2_ParameterSetType {
-    // ParameterSetID, short (base: int)
-    int16_t ParameterSetID;
-    // Parameter, ParameterType
-    struct {
-        struct iso2_ParameterType array[iso2_ParameterType_16_ARRAY_SIZE];
-        uint16_t arrayLen;
-    } Parameter;
 };
 
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}SAScheduleTuple; type={urn:iso:15118:2:2013:MsgDataTypes}SAScheduleTupleType; base type=; content type=ELEMENT-ONLY;
@@ -1241,43 +1174,82 @@ struct iso2_SAScheduleTupleType {
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}MeterInfo; type={urn:iso:15118:2:2013:MsgDataTypes}MeterInfoType; base type=; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ContractSignatureCertChain; type={urn:iso:15118:2:2013:MsgDataTypes}CertificateChainType; base type=; content type=ELEMENT-ONLY;
 //          abstract=False; final=False;
-// Particle: MeterID, meterIDType (1, 1); MeterReading, unsignedLong (0, 1); SigMeterReading, sigMeterReadingType (0, 1); MeterStatus, meterStatusType (0, 1); TMeter, long (0, 1);
-struct iso2_MeterInfoType {
-    // MeterID, meterIDType (base: string)
+// Particle: Id, ID (0, 1); Certificate, certificateType (1, 1); SubCertificates, SubCertificatesType (0, 1);
+struct iso2_CertificateChainType {
+    // Attribute: Id, ID (base: NCName)
     struct {
-        char characters[iso2_MeterID_CHARACTER_SIZE];
+        char characters[iso2_Id_CHARACTER_SIZE];
         uint16_t charactersLen;
-    } MeterID;
-    // MeterReading, unsignedLong (base: nonNegativeInteger)
-    uint64_t MeterReading;
-    unsigned int MeterReading_isUsed:1;
-    // SigMeterReading, sigMeterReadingType (base: base64Binary)
+    } Id;
+    unsigned int Id_isUsed:1;
+    // Certificate, certificateType (base: base64Binary)
     struct {
-        uint8_t bytes[iso2_sigMeterReadingType_BYTES_SIZE];
+        uint8_t bytes[iso2_certificateType_BYTES_SIZE];
         uint16_t bytesLen;
-    } SigMeterReading;
-    unsigned int SigMeterReading_isUsed:1;
+    } Certificate;
 
-    // MeterStatus, meterStatusType (base: short)
-    int16_t MeterStatus;
-    unsigned int MeterStatus_isUsed:1;
-    // TMeter, long (base: integer)
-    int64_t TMeter;
-    unsigned int TMeter_isUsed:1;
+    // SubCertificates, SubCertificatesType
+    struct iso2_SubCertificatesType SubCertificates;
+    unsigned int SubCertificates_isUsed:1;
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ChargingProfile; type={urn:iso:15118:2:2013:MsgDataTypes}ChargingProfileType; base type=; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SelectedServiceList; type={urn:iso:15118:2:2013:MsgDataTypes}SelectedServiceListType; base type=; content type=ELEMENT-ONLY;
 //          abstract=False; final=False;
-// Particle: ProfileEntry, ProfileEntryType (1, 24);
-struct iso2_ChargingProfileType {
-    // ProfileEntry, ProfileEntryType
+// Particle: SelectedService, SelectedServiceType (1, 16);
+struct iso2_SelectedServiceListType {
+    // SelectedService, SelectedServiceType
     struct {
-        struct iso2_ProfileEntryType array[iso2_ProfileEntryType_24_ARRAY_SIZE];
+        struct iso2_SelectedServiceType array[iso2_SelectedServiceType_16_ARRAY_SIZE];
         uint16_t arrayLen;
-    } ProfileEntry;
+    } SelectedService;
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ListOfRootCertificateIDs; type={urn:iso:15118:2:2013:MsgDataTypes}ListOfRootCertificateIDsType; base type=; content type=ELEMENT-ONLY;
+//          abstract=False; final=False;
+// Particle: RootCertificateID, X509IssuerSerialType (1, 5);
+struct iso2_ListOfRootCertificateIDsType {
+    // RootCertificateID, X509IssuerSerialType
+    struct {
+        struct iso2_X509IssuerSerialType array[iso2_X509IssuerSerialType_5_ARRAY_SIZE];
+        uint16_t arrayLen;
+    } RootCertificateID;
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentOptionList; type={urn:iso:15118:2:2013:MsgDataTypes}PaymentOptionListType; base type=; content type=ELEMENT-ONLY;
+//          abstract=False; final=False;
+// Particle: PaymentOption, paymentOptionType (1, 2);
+struct iso2_PaymentOptionListType {
+    // PaymentOption, paymentOptionType (base: string)
+    struct {
+        iso2_paymentOptionType array[iso2_paymentOptionType_2_ARRAY_SIZE];
+        uint16_t arrayLen;
+    } PaymentOption;
+};
+
+// Element: definition=complex; name={http://www.w3.org/2000/09/xmldsig#}Signature; type={http://www.w3.org/2000/09/xmldsig#}SignatureType; base type=; content type=ELEMENT-ONLY;
+//          abstract=False; final=False;
+// Particle: Id, ID (0, 1); SignedInfo, SignedInfoType (1, 1); SignatureValue, SignatureValueType (1, 1); KeyInfo, KeyInfoType (0, 1); Object, ObjectType (0, 1);
+struct iso2_SignatureType {
+    // Attribute: Id, ID (base: NCName)
+    struct {
+        char characters[iso2_Id_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } Id;
+    unsigned int Id_isUsed:1;
+    // SignedInfo, SignedInfoType
+    struct iso2_SignedInfoType SignedInfo;
+    // SignatureValue, SignatureValueType (base: base64Binary)
+    struct iso2_SignatureValueType SignatureValue;
+    // KeyInfo, KeyInfoType
+    struct iso2_KeyInfoType KeyInfo;
+    unsigned int KeyInfo_isUsed:1;
+    // Object, ObjectType
+    struct iso2_ObjectType Object;
+    unsigned int Object_isUsed:1;
+
 };
 
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceParameterList; type={urn:iso:15118:2:2013:MsgDataTypes}ServiceParameterListType; base type=; content type=ELEMENT-ONLY;
@@ -1289,24 +1261,6 @@ struct iso2_ServiceParameterListType {
         struct iso2_ParameterSetType array[iso2_ParameterSetType_5_ARRAY_SIZE];
         uint16_t arrayLen;
     } ParameterSet;
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}AC_EVChargeParameter; type={urn:iso:15118:2:2013:MsgDataTypes}AC_EVChargeParameterType; base type=EVChargeParameterType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: DepartureTime, unsignedInt (0, 1); EAmount, PhysicalValueType (1, 1); EVMaxVoltage, PhysicalValueType (1, 1); EVMaxCurrent, PhysicalValueType (1, 1); EVMinCurrent, PhysicalValueType (1, 1);
-struct iso2_AC_EVChargeParameterType {
-    // DepartureTime, unsignedInt (base: unsignedLong)
-    uint32_t DepartureTime;
-    unsigned int DepartureTime_isUsed:1;
-    // EAmount, PhysicalValueType
-    struct iso2_PhysicalValueType EAmount;
-    // EVMaxVoltage, PhysicalValueType
-    struct iso2_PhysicalValueType EVMaxVoltage;
-    // EVMaxCurrent, PhysicalValueType
-    struct iso2_PhysicalValueType EVMaxCurrent;
-    // EVMinCurrent, PhysicalValueType
-    struct iso2_PhysicalValueType EVMinCurrent;
-
 };
 
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}DC_EVChargeParameter; type={urn:iso:15118:2:2013:MsgDataTypes}DC_EVChargeParameterType; base type=EVChargeParameterType; content type=ELEMENT-ONLY;
@@ -1340,18 +1294,47 @@ struct iso2_DC_EVChargeParameterType {
 
 };
 
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}AC_EVChargeParameter; type={urn:iso:15118:2:2013:MsgDataTypes}AC_EVChargeParameterType; base type=EVChargeParameterType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: DepartureTime, unsignedInt (0, 1); EAmount, PhysicalValueType (1, 1); EVMaxVoltage, PhysicalValueType (1, 1); EVMaxCurrent, PhysicalValueType (1, 1); EVMinCurrent, PhysicalValueType (1, 1);
+struct iso2_AC_EVChargeParameterType {
+    // DepartureTime, unsignedInt (base: unsignedLong)
+    uint32_t DepartureTime;
+    unsigned int DepartureTime_isUsed:1;
+    // EAmount, PhysicalValueType
+    struct iso2_PhysicalValueType EAmount;
+    // EVMaxVoltage, PhysicalValueType
+    struct iso2_PhysicalValueType EVMaxVoltage;
+    // EVMaxCurrent, PhysicalValueType
+    struct iso2_PhysicalValueType EVMaxCurrent;
+    // EVMinCurrent, PhysicalValueType
+    struct iso2_PhysicalValueType EVMinCurrent;
+
+};
+
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}EVChargeParameter; type={urn:iso:15118:2:2013:MsgDataTypes}EVChargeParameterType; base type=; content type=ELEMENT-ONLY;
 //          abstract=True; final=False;
-// Particle: DepartureTime, unsignedInt (0, 1); AC_EVChargeParameter, AC_EVChargeParameterType (1, 1); DC_EVChargeParameter, DC_EVChargeParameterType (1, 1);
+// Particle: DepartureTime, unsignedInt (0, 1); DC_EVChargeParameter, DC_EVChargeParameterType (1, 1); AC_EVChargeParameter, AC_EVChargeParameterType (1, 1);
 struct iso2_EVChargeParameterType {
     // DepartureTime, unsignedInt (base: unsignedLong)
     uint32_t DepartureTime;
     unsigned int DepartureTime_isUsed:1;
-    // AC_EVChargeParameter, AC_EVChargeParameterType (base: EVChargeParameterType)
-    struct iso2_AC_EVChargeParameterType AC_EVChargeParameter;
     // DC_EVChargeParameter, DC_EVChargeParameterType (base: EVChargeParameterType)
     struct iso2_DC_EVChargeParameterType DC_EVChargeParameter;
+    // AC_EVChargeParameter, AC_EVChargeParameterType (base: EVChargeParameterType)
+    struct iso2_AC_EVChargeParameterType AC_EVChargeParameter;
 
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ChargingProfile; type={urn:iso:15118:2:2013:MsgDataTypes}ChargingProfileType; base type=; content type=ELEMENT-ONLY;
+//          abstract=False; final=False;
+// Particle: ProfileEntry, ProfileEntryType (1, 24);
+struct iso2_ChargingProfileType {
+    // ProfileEntry, ProfileEntryType
+    struct {
+        struct iso2_ProfileEntryType array[iso2_ProfileEntryType_24_ARRAY_SIZE];
+        uint16_t arrayLen;
+    } ProfileEntry;
 };
 
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}SASchedules; type={urn:iso:15118:2:2013:MsgDataTypes}SASchedulesType; base type=; content type=empty;
@@ -1399,15 +1382,22 @@ struct iso2_ChargeServiceType {
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ListOfRootCertificateIDs; type={urn:iso:15118:2:2013:MsgDataTypes}ListOfRootCertificateIDsType; base type=; content type=ELEMENT-ONLY;
-//          abstract=False; final=False;
-// Particle: RootCertificateID, X509IssuerSerialType (1, 5);
-struct iso2_ListOfRootCertificateIDsType {
-    // RootCertificateID, X509IssuerSerialType
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ContractSignatureEncryptedPrivateKey; type={urn:iso:15118:2:2013:MsgDataTypes}ContractSignatureEncryptedPrivateKeyType; base type=privateKeyType; content type=simple;
+//          abstract=False; final=False; derivation=extension;
+// Particle: Id, ID (1, 1); CONTENT, ContractSignatureEncryptedPrivateKeyType (1, 1);
+struct iso2_ContractSignatureEncryptedPrivateKeyType {
+    // Attribute: Id, ID (base: NCName)
     struct {
-        struct iso2_X509IssuerSerialType array[iso2_X509IssuerSerialType_5_ARRAY_SIZE];
-        uint16_t arrayLen;
-    } RootCertificateID;
+        char characters[iso2_Id_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } Id;
+    // CONTENT, ContractSignatureEncryptedPrivateKeyType (base: base64Binary)
+    struct {
+        uint8_t bytes[iso2_ContractSignatureEncryptedPrivateKeyType_BYTES_SIZE];
+        uint16_t bytesLen;
+    } CONTENT;
+
+
 };
 
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgDataTypes}EVPowerDeliveryParameter; type={urn:iso:15118:2:2013:MsgDataTypes}EVPowerDeliveryParameterType; base type=; content type=empty;
@@ -1428,24 +1418,6 @@ struct iso2_DC_EVPowerDeliveryParameterType {
     unsigned int BulkChargingComplete_isUsed:1;
     // ChargingComplete, boolean
     int ChargingComplete;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ContractSignatureEncryptedPrivateKey; type={urn:iso:15118:2:2013:MsgDataTypes}ContractSignatureEncryptedPrivateKeyType; base type=privateKeyType; content type=simple;
-//          abstract=False; final=False; derivation=extension;
-// Particle: Id, ID (1, 1); CONTENT, ContractSignatureEncryptedPrivateKeyType (1, 1);
-struct iso2_ContractSignatureEncryptedPrivateKeyType {
-    // Attribute: Id, ID (base: NCName)
-    struct {
-        char characters[iso2_Id_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } Id;
-    // CONTENT, ContractSignatureEncryptedPrivateKeyType (base: base64Binary)
-    struct {
-        uint8_t bytes[iso2_ContractSignatureEncryptedPrivateKeyType_BYTES_SIZE];
-        uint16_t bytesLen;
-    } CONTENT;
-
 
 };
 
@@ -1525,6 +1497,34 @@ struct iso2_DiffieHellmanPublickeyType {
 
 };
 
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}MeterInfo; type={urn:iso:15118:2:2013:MsgDataTypes}MeterInfoType; base type=; content type=ELEMENT-ONLY;
+//          abstract=False; final=False;
+// Particle: MeterID, meterIDType (1, 1); MeterReading, unsignedLong (0, 1); SigMeterReading, sigMeterReadingType (0, 1); MeterStatus, meterStatusType (0, 1); TMeter, long (0, 1);
+struct iso2_MeterInfoType {
+    // MeterID, meterIDType (base: string)
+    struct {
+        char characters[iso2_MeterID_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } MeterID;
+    // MeterReading, unsignedLong (base: nonNegativeInteger)
+    uint64_t MeterReading;
+    unsigned int MeterReading_isUsed:1;
+    // SigMeterReading, sigMeterReadingType (base: base64Binary)
+    struct {
+        uint8_t bytes[iso2_sigMeterReadingType_BYTES_SIZE];
+        uint16_t bytesLen;
+    } SigMeterReading;
+    unsigned int SigMeterReading_isUsed:1;
+
+    // MeterStatus, meterStatusType (base: short)
+    int16_t MeterStatus;
+    unsigned int MeterStatus_isUsed:1;
+    // TMeter, long (base: integer)
+    int64_t TMeter;
+    unsigned int TMeter_isUsed:1;
+
+};
+
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}eMAID; type={urn:iso:15118:2:2013:MsgDataTypes}EMAIDType; base type=eMAIDType; content type=simple;
 //          abstract=False; final=False; derivation=extension;
 // Particle: Id, ID (1, 1); CONTENT, EMAIDType (1, 1);
@@ -1561,62 +1561,54 @@ struct iso2_MessageHeaderType {
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}WeldingDetectionReq; type={urn:iso:15118:2:2013:MsgBody}WeldingDetectionReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}MeteringReceiptRes; type={urn:iso:15118:2:2013:MsgBody}MeteringReceiptResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
 //          abstract=False; final=False; derivation=extension;
-// Particle: DC_EVStatus, DC_EVStatusType (1, 1);
-struct iso2_WeldingDetectionReqType {
-    // DC_EVStatus, DC_EVStatusType (base: EVStatusType)
-    struct iso2_DC_EVStatusType DC_EVStatus;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}WeldingDetectionRes; type={urn:iso:15118:2:2013:MsgBody}WeldingDetectionResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); DC_EVSEStatus, DC_EVSEStatusType (1, 1); EVSEPresentVoltage, PhysicalValueType (1, 1);
-struct iso2_WeldingDetectionResType {
+// Particle: ResponseCode, responseCodeType (1, 1); AC_EVSEStatus, AC_EVSEStatusType (0, 1); DC_EVSEStatus, DC_EVSEStatusType (0, 1); EVSEStatus, EVSEStatusType (0, 1);
+struct iso2_MeteringReceiptResType {
     // ResponseCode, responseCodeType (base: string)
     iso2_responseCodeType ResponseCode;
+    // AC_EVSEStatus, AC_EVSEStatusType (base: EVSEStatusType)
+    struct iso2_AC_EVSEStatusType AC_EVSEStatus;
+    unsigned int AC_EVSEStatus_isUsed:1;
     // DC_EVSEStatus, DC_EVSEStatusType (base: EVSEStatusType)
     struct iso2_DC_EVSEStatusType DC_EVSEStatus;
-    // EVSEPresentVoltage, PhysicalValueType
-    struct iso2_PhysicalValueType EVSEPresentVoltage;
+    unsigned int DC_EVSEStatus_isUsed:1;
+    // EVSEStatus, EVSEStatusType
+    struct iso2_EVSEStatusType EVSEStatus;
+    unsigned int EVSEStatus_isUsed:1;
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PreChargeReq; type={urn:iso:15118:2:2013:MsgBody}PreChargeReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionSetupReq; type={urn:iso:15118:2:2013:MsgBody}SessionSetupReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
 //          abstract=False; final=False; derivation=extension;
-// Particle: DC_EVStatus, DC_EVStatusType (1, 1); EVTargetVoltage, PhysicalValueType (1, 1); EVTargetCurrent, PhysicalValueType (1, 1);
-struct iso2_PreChargeReqType {
-    // DC_EVStatus, DC_EVStatusType (base: EVStatusType)
-    struct iso2_DC_EVStatusType DC_EVStatus;
-    // EVTargetVoltage, PhysicalValueType
-    struct iso2_PhysicalValueType EVTargetVoltage;
-    // EVTargetCurrent, PhysicalValueType
-    struct iso2_PhysicalValueType EVTargetCurrent;
+// Particle: EVCCID, evccIDType (1, 1);
+struct iso2_SessionSetupReqType {
+    // EVCCID, evccIDType (base: hexBinary)
+    struct {
+        uint8_t bytes[iso2_evccIDType_BYTES_SIZE];
+        uint16_t bytesLen;
+    } EVCCID;
+
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}MeteringReceiptReq; type={urn:iso:15118:2:2013:MsgBody}MeteringReceiptReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}AuthorizationReq; type={urn:iso:15118:2:2013:MsgBody}AuthorizationReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
 //          abstract=False; final=False; derivation=extension;
-// Particle: Id, ID (0, 1); SessionID, sessionIDType (1, 1); SAScheduleTupleID, SAIDType (0, 1); MeterInfo, MeterInfoType (1, 1);
-struct iso2_MeteringReceiptReqType {
+// Particle: Id, ID (0, 1); GenChallenge, genChallengeType (0, 1);
+struct iso2_AuthorizationReqType {
     // Attribute: Id, ID (base: NCName)
     struct {
         char characters[iso2_Id_CHARACTER_SIZE];
         uint16_t charactersLen;
     } Id;
     unsigned int Id_isUsed:1;
-    // SessionID, sessionIDType (base: hexBinary)
+    // GenChallenge, genChallengeType (base: base64Binary)
     struct {
-        uint8_t bytes[iso2_sessionIDType_BYTES_SIZE];
+        uint8_t bytes[iso2_genChallengeType_BYTES_SIZE];
         uint16_t bytesLen;
-    } SessionID;
+    } GenChallenge;
+    unsigned int GenChallenge_isUsed:1;
 
-    // SAScheduleTupleID, SAIDType (base: unsignedByte)
-    uint8_t SAScheduleTupleID;
-    unsigned int SAScheduleTupleID_isUsed:1;
-    // MeterInfo, MeterInfoType
-    struct iso2_MeterInfoType MeterInfo;
 
 };
 
@@ -1630,122 +1622,6 @@ struct iso2_CableCheckResType {
     struct iso2_DC_EVSEStatusType DC_EVSEStatus;
     // EVSEProcessing, EVSEProcessingType (base: string)
     iso2_EVSEProcessingType EVSEProcessing;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PowerDeliveryReq; type={urn:iso:15118:2:2013:MsgBody}PowerDeliveryReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ChargeProgress, chargeProgressType (1, 1); SAScheduleTupleID, SAIDType (1, 1); ChargingProfile, ChargingProfileType (0, 1); DC_EVPowerDeliveryParameter, DC_EVPowerDeliveryParameterType (0, 1); EVPowerDeliveryParameter, EVPowerDeliveryParameterType (0, 1);
-struct iso2_PowerDeliveryReqType {
-    // ChargeProgress, chargeProgressType (base: string)
-    iso2_chargeProgressType ChargeProgress;
-    // SAScheduleTupleID, SAIDType (base: unsignedByte)
-    uint8_t SAScheduleTupleID;
-    // ChargingProfile, ChargingProfileType
-    struct iso2_ChargingProfileType ChargingProfile;
-    unsigned int ChargingProfile_isUsed:1;
-    // DC_EVPowerDeliveryParameter, DC_EVPowerDeliveryParameterType (base: EVPowerDeliveryParameterType)
-    struct iso2_DC_EVPowerDeliveryParameterType DC_EVPowerDeliveryParameter;
-    unsigned int DC_EVPowerDeliveryParameter_isUsed:1;
-    // EVPowerDeliveryParameter, EVPowerDeliveryParameterType
-    struct iso2_EVPowerDeliveryParameterType EVPowerDeliveryParameter;
-    unsigned int EVPowerDeliveryParameter_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionStopReq; type={urn:iso:15118:2:2013:MsgBody}SessionStopReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ChargingSession, chargingSessionType (1, 1);
-struct iso2_SessionStopReqType {
-    // ChargingSession, chargingSessionType (base: string)
-    iso2_chargingSessionType ChargingSession;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionSetupRes; type={urn:iso:15118:2:2013:MsgBody}SessionSetupResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); EVSEID, evseIDType (1, 1); EVSETimeStamp, long (0, 1);
-struct iso2_SessionSetupResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // EVSEID, evseIDType (base: string)
-    struct {
-        char characters[iso2_EVSEID_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } EVSEID;
-    // EVSETimeStamp, long (base: integer)
-    int64_t EVSETimeStamp;
-    unsigned int EVSETimeStamp_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateUpdateRes; type={urn:iso:15118:2:2013:MsgBody}CertificateUpdateResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); SAProvisioningCertificateChain, CertificateChainType (1, 1); ContractSignatureCertChain, CertificateChainType (1, 1); ContractSignatureEncryptedPrivateKey, ContractSignatureEncryptedPrivateKeyType (1, 1); DHpublickey, DiffieHellmanPublickeyType (1, 1); eMAID, EMAIDType (1, 1); RetryCounter, short (0, 1);
-struct iso2_CertificateUpdateResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // SAProvisioningCertificateChain, CertificateChainType
-    struct iso2_CertificateChainType SAProvisioningCertificateChain;
-    // ContractSignatureCertChain, CertificateChainType
-    struct iso2_CertificateChainType ContractSignatureCertChain;
-    // ContractSignatureEncryptedPrivateKey, ContractSignatureEncryptedPrivateKeyType (base: privateKeyType)
-    struct iso2_ContractSignatureEncryptedPrivateKeyType ContractSignatureEncryptedPrivateKey;
-    // DHpublickey, DiffieHellmanPublickeyType (base: dHpublickeyType)
-    struct iso2_DiffieHellmanPublickeyType DHpublickey;
-    // eMAID, EMAIDType (base: eMAIDType)
-    struct iso2_EMAIDType eMAID;
-    // RetryCounter, short (base: int)
-    int16_t RetryCounter;
-    unsigned int RetryCounter_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CableCheckReq; type={urn:iso:15118:2:2013:MsgBody}CableCheckReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: DC_EVStatus, DC_EVStatusType (1, 1);
-struct iso2_CableCheckReqType {
-    // DC_EVStatus, DC_EVStatusType (base: EVStatusType)
-    struct iso2_DC_EVStatusType DC_EVStatus;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDetailReq; type={urn:iso:15118:2:2013:MsgBody}ServiceDetailReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ServiceID, serviceIDType (1, 1);
-struct iso2_ServiceDetailReqType {
-    // ServiceID, serviceIDType (base: unsignedShort)
-    uint16_t ServiceID;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PreChargeRes; type={urn:iso:15118:2:2013:MsgBody}PreChargeResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); DC_EVSEStatus, DC_EVSEStatusType (1, 1); EVSEPresentVoltage, PhysicalValueType (1, 1);
-struct iso2_PreChargeResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // DC_EVSEStatus, DC_EVSEStatusType (base: EVSEStatusType)
-    struct iso2_DC_EVSEStatusType DC_EVSEStatus;
-    // EVSEPresentVoltage, PhysicalValueType
-    struct iso2_PhysicalValueType EVSEPresentVoltage;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentDetailsRes; type={urn:iso:15118:2:2013:MsgBody}PaymentDetailsResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); GenChallenge, genChallengeType (1, 1); EVSETimeStamp, long (1, 1);
-struct iso2_PaymentDetailsResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // GenChallenge, genChallengeType (base: base64Binary)
-    struct {
-        uint8_t bytes[iso2_genChallengeType_BYTES_SIZE];
-        uint16_t bytesLen;
-    } GenChallenge;
-
-    // EVSETimeStamp, long (base: integer)
-    int64_t EVSETimeStamp;
 
 };
 
@@ -1782,44 +1658,83 @@ struct iso2_CurrentDemandReqType {
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDetailRes; type={urn:iso:15118:2:2013:MsgBody}ServiceDetailResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); ServiceID, serviceIDType (1, 1); ServiceParameterList, ServiceParameterListType (0, 1);
-struct iso2_ServiceDetailResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // ServiceID, serviceIDType (base: unsignedShort)
-    uint16_t ServiceID;
-    // ServiceParameterList, ServiceParameterListType
-    struct iso2_ServiceParameterListType ServiceParameterList;
-    unsigned int ServiceParameterList_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionStopRes; type={urn:iso:15118:2:2013:MsgBody}SessionStopResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionRes; type={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
 //          abstract=False; final=False; derivation=extension;
 // Particle: ResponseCode, responseCodeType (1, 1);
-struct iso2_SessionStopResType {
+struct iso2_PaymentServiceSelectionResType {
     // ResponseCode, responseCodeType (base: string)
     iso2_responseCodeType ResponseCode;
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}MeteringReceiptRes; type={urn:iso:15118:2:2013:MsgBody}MeteringReceiptResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryReq; type={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
 //          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); AC_EVSEStatus, AC_EVSEStatusType (0, 1); DC_EVSEStatus, DC_EVSEStatusType (0, 1); EVSEStatus, EVSEStatusType (0, 1);
-struct iso2_MeteringReceiptResType {
+// Particle: ServiceScope, serviceScopeType (0, 1); ServiceCategory, serviceCategoryType (0, 1);
+struct iso2_ServiceDiscoveryReqType {
+    // ServiceScope, serviceScopeType (base: string)
+    struct {
+        char characters[iso2_ServiceScope_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } ServiceScope;
+    unsigned int ServiceScope_isUsed:1;
+    // ServiceCategory, serviceCategoryType (base: string)
+    iso2_serviceCategoryType ServiceCategory;
+    unsigned int ServiceCategory_isUsed:1;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDetailReq; type={urn:iso:15118:2:2013:MsgBody}ServiceDetailReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ServiceID, serviceIDType (1, 1);
+struct iso2_ServiceDetailReqType {
+    // ServiceID, serviceIDType (base: unsignedShort)
+    uint16_t ServiceID;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}WeldingDetectionRes; type={urn:iso:15118:2:2013:MsgBody}WeldingDetectionResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); DC_EVSEStatus, DC_EVSEStatusType (1, 1); EVSEPresentVoltage, PhysicalValueType (1, 1);
+struct iso2_WeldingDetectionResType {
     // ResponseCode, responseCodeType (base: string)
     iso2_responseCodeType ResponseCode;
-    // AC_EVSEStatus, AC_EVSEStatusType (base: EVSEStatusType)
-    struct iso2_AC_EVSEStatusType AC_EVSEStatus;
-    unsigned int AC_EVSEStatus_isUsed:1;
     // DC_EVSEStatus, DC_EVSEStatusType (base: EVSEStatusType)
     struct iso2_DC_EVSEStatusType DC_EVSEStatus;
-    unsigned int DC_EVSEStatus_isUsed:1;
-    // EVSEStatus, EVSEStatusType
-    struct iso2_EVSEStatusType EVSEStatus;
-    unsigned int EVSEStatus_isUsed:1;
+    // EVSEPresentVoltage, PhysicalValueType
+    struct iso2_PhysicalValueType EVSEPresentVoltage;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionStopReq; type={urn:iso:15118:2:2013:MsgBody}SessionStopReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ChargingSession, chargingSessionType (1, 1);
+struct iso2_SessionStopReqType {
+    // ChargingSession, chargingSessionType (base: string)
+    iso2_chargingSessionType ChargingSession;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}AuthorizationRes; type={urn:iso:15118:2:2013:MsgBody}AuthorizationResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); EVSEProcessing, EVSEProcessingType (1, 1);
+struct iso2_AuthorizationResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // EVSEProcessing, EVSEProcessingType (base: string)
+    iso2_EVSEProcessingType EVSEProcessing;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PreChargeReq; type={urn:iso:15118:2:2013:MsgBody}PreChargeReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: DC_EVStatus, DC_EVStatusType (1, 1); EVTargetVoltage, PhysicalValueType (1, 1); EVTargetCurrent, PhysicalValueType (1, 1);
+struct iso2_PreChargeReqType {
+    // DC_EVStatus, DC_EVStatusType (base: EVStatusType)
+    struct iso2_DC_EVStatusType DC_EVStatus;
+    // EVTargetVoltage, PhysicalValueType
+    struct iso2_PhysicalValueType EVTargetVoltage;
+    // EVTargetCurrent, PhysicalValueType
+    struct iso2_PhysicalValueType EVTargetCurrent;
 
 };
 
@@ -1834,6 +1749,29 @@ struct iso2_PaymentDetailsReqType {
     } eMAID;
     // ContractSignatureCertChain, CertificateChainType
     struct iso2_CertificateChainType ContractSignatureCertChain;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}WeldingDetectionReq; type={urn:iso:15118:2:2013:MsgBody}WeldingDetectionReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: DC_EVStatus, DC_EVStatusType (1, 1);
+struct iso2_WeldingDetectionReqType {
+    // DC_EVStatus, DC_EVStatusType (base: EVStatusType)
+    struct iso2_DC_EVStatusType DC_EVStatus;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDetailRes; type={urn:iso:15118:2:2013:MsgBody}ServiceDetailResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); ServiceID, serviceIDType (1, 1); ServiceParameterList, ServiceParameterListType (0, 1);
+struct iso2_ServiceDetailResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // ServiceID, serviceIDType (base: unsignedShort)
+    uint16_t ServiceID;
+    // ServiceParameterList, ServiceParameterListType
+    struct iso2_ServiceParameterListType ServiceParameterList;
+    unsigned int ServiceParameterList_isUsed:1;
 
 };
 
@@ -1858,101 +1796,30 @@ struct iso2_ChargeParameterDiscoveryReqType {
 
 };
 
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateInstallationRes; type={urn:iso:15118:2:2013:MsgBody}CertificateInstallationResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); SAProvisioningCertificateChain, CertificateChainType (1, 1); ContractSignatureCertChain, CertificateChainType (1, 1); ContractSignatureEncryptedPrivateKey, ContractSignatureEncryptedPrivateKeyType (1, 1); DHpublickey, DiffieHellmanPublickeyType (1, 1); eMAID, EMAIDType (1, 1);
+struct iso2_CertificateInstallationResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // SAProvisioningCertificateChain, CertificateChainType
+    struct iso2_CertificateChainType SAProvisioningCertificateChain;
+    // ContractSignatureCertChain, CertificateChainType
+    struct iso2_CertificateChainType ContractSignatureCertChain;
+    // ContractSignatureEncryptedPrivateKey, ContractSignatureEncryptedPrivateKeyType (base: privateKeyType)
+    struct iso2_ContractSignatureEncryptedPrivateKeyType ContractSignatureEncryptedPrivateKey;
+    // DHpublickey, DiffieHellmanPublickeyType (base: dHpublickeyType)
+    struct iso2_DiffieHellmanPublickeyType DHpublickey;
+    // eMAID, EMAIDType (base: eMAIDType)
+    struct iso2_EMAIDType eMAID;
+
+};
+
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ChargingStatusReq; type={urn:iso:15118:2:2013:MsgBody}ChargingStatusReqType; base type=BodyBaseType; content type=empty;
 //          abstract=False; final=False; derivation=extension;
 // Particle: 
 struct iso2_ChargingStatusReqType {
     int _unused;
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ChargeParameterDiscoveryRes; type={urn:iso:15118:2:2013:MsgBody}ChargeParameterDiscoveryResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); EVSEProcessing, EVSEProcessingType (1, 1); SAScheduleList, SAScheduleListType (0, 1); SASchedules, SASchedulesType (0, 1); AC_EVSEChargeParameter, AC_EVSEChargeParameterType (0, 1); DC_EVSEChargeParameter, DC_EVSEChargeParameterType (0, 1); EVSEChargeParameter, EVSEChargeParameterType (0, 1);
-struct iso2_ChargeParameterDiscoveryResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // EVSEProcessing, EVSEProcessingType (base: string)
-    iso2_EVSEProcessingType EVSEProcessing;
-    // SAScheduleList, SAScheduleListType (base: SASchedulesType)
-    struct iso2_SAScheduleListType SAScheduleList;
-    unsigned int SAScheduleList_isUsed:1;
-    // SASchedules, SASchedulesType
-    struct iso2_SASchedulesType SASchedules;
-    unsigned int SASchedules_isUsed:1;
-    // AC_EVSEChargeParameter, AC_EVSEChargeParameterType (base: EVSEChargeParameterType)
-    struct iso2_AC_EVSEChargeParameterType AC_EVSEChargeParameter;
-    unsigned int AC_EVSEChargeParameter_isUsed:1;
-    // DC_EVSEChargeParameter, DC_EVSEChargeParameterType (base: EVSEChargeParameterType)
-    struct iso2_DC_EVSEChargeParameterType DC_EVSEChargeParameter;
-    unsigned int DC_EVSEChargeParameter_isUsed:1;
-    // EVSEChargeParameter, EVSEChargeParameterType
-    struct iso2_EVSEChargeParameterType EVSEChargeParameter;
-    unsigned int EVSEChargeParameter_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}AuthorizationRes; type={urn:iso:15118:2:2013:MsgBody}AuthorizationResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); EVSEProcessing, EVSEProcessingType (1, 1);
-struct iso2_AuthorizationResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // EVSEProcessing, EVSEProcessingType (base: string)
-    iso2_EVSEProcessingType EVSEProcessing;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryRes; type={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); PaymentOptionList, PaymentOptionListType (1, 1); ChargeService, ChargeServiceType (1, 1); ServiceList, ServiceListType (0, 1);
-struct iso2_ServiceDiscoveryResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // PaymentOptionList, PaymentOptionListType
-    struct iso2_PaymentOptionListType PaymentOptionList;
-    // ChargeService, ChargeServiceType (base: ServiceType)
-    struct iso2_ChargeServiceType ChargeService;
-    // ServiceList, ServiceListType
-    struct iso2_ServiceListType ServiceList;
-    unsigned int ServiceList_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateUpdateReq; type={urn:iso:15118:2:2013:MsgBody}CertificateUpdateReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: Id, ID (1, 1); ContractSignatureCertChain, CertificateChainType (1, 1); eMAID, eMAIDType (1, 1); ListOfRootCertificateIDs, ListOfRootCertificateIDsType (1, 1);
-struct iso2_CertificateUpdateReqType {
-    // Attribute: Id, ID (base: NCName)
-    struct {
-        char characters[iso2_Id_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } Id;
-    // ContractSignatureCertChain, CertificateChainType
-    struct iso2_CertificateChainType ContractSignatureCertChain;
-    // eMAID, eMAIDType (base: string)
-    struct {
-        char characters[iso2_eMAID_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } eMAID;
-    // ListOfRootCertificateIDs, ListOfRootCertificateIDsType
-    struct iso2_ListOfRootCertificateIDsType ListOfRootCertificateIDs;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryReq; type={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ServiceScope, serviceScopeType (0, 1); ServiceCategory, serviceCategoryType (0, 1);
-struct iso2_ServiceDiscoveryReqType {
-    // ServiceScope, serviceScopeType (base: string)
-    struct {
-        char characters[iso2_ServiceScope_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } ServiceScope;
-    unsigned int ServiceScope_isUsed:1;
-    // ServiceCategory, serviceCategoryType (base: string)
-    iso2_serviceCategoryType ServiceCategory;
-    unsigned int ServiceCategory_isUsed:1;
-
 };
 
 // Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ChargingStatusRes; type={urn:iso:15118:2:2013:MsgBody}ChargingStatusResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
@@ -1982,61 +1849,10 @@ struct iso2_ChargingStatusResType {
 
 };
 
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateInstallationReq; type={urn:iso:15118:2:2013:MsgBody}CertificateInstallationReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateUpdateRes; type={urn:iso:15118:2:2013:MsgBody}CertificateUpdateResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
 //          abstract=False; final=False; derivation=extension;
-// Particle: Id, ID (1, 1); OEMProvisioningCert, certificateType (1, 1); ListOfRootCertificateIDs, ListOfRootCertificateIDsType (1, 1);
-struct iso2_CertificateInstallationReqType {
-    // Attribute: Id, ID (base: NCName)
-    struct {
-        char characters[iso2_Id_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } Id;
-    // OEMProvisioningCert, certificateType (base: base64Binary)
-    struct {
-        uint8_t bytes[iso2_certificateType_BYTES_SIZE];
-        uint16_t bytesLen;
-    } OEMProvisioningCert;
-
-    // ListOfRootCertificateIDs, ListOfRootCertificateIDsType
-    struct iso2_ListOfRootCertificateIDsType ListOfRootCertificateIDs;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionReq; type={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: SelectedPaymentOption, paymentOptionType (1, 1); SelectedServiceList, SelectedServiceListType (1, 1);
-struct iso2_PaymentServiceSelectionReqType {
-    // SelectedPaymentOption, paymentOptionType (base: string)
-    iso2_paymentOptionType SelectedPaymentOption;
-    // SelectedServiceList, SelectedServiceListType
-    struct iso2_SelectedServiceListType SelectedServiceList;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}AuthorizationReq; type={urn:iso:15118:2:2013:MsgBody}AuthorizationReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: Id, ID (0, 1); GenChallenge, genChallengeType (0, 1);
-struct iso2_AuthorizationReqType {
-    // Attribute: Id, ID (base: NCName)
-    struct {
-        char characters[iso2_Id_CHARACTER_SIZE];
-        uint16_t charactersLen;
-    } Id;
-    unsigned int Id_isUsed:1;
-    // GenChallenge, genChallengeType (base: base64Binary)
-    struct {
-        uint8_t bytes[iso2_genChallengeType_BYTES_SIZE];
-        uint16_t bytesLen;
-    } GenChallenge;
-    unsigned int GenChallenge_isUsed:1;
-
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateInstallationRes; type={urn:iso:15118:2:2013:MsgBody}CertificateInstallationResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); SAProvisioningCertificateChain, CertificateChainType (1, 1); ContractSignatureCertChain, CertificateChainType (1, 1); ContractSignatureEncryptedPrivateKey, ContractSignatureEncryptedPrivateKeyType (1, 1); DHpublickey, DiffieHellmanPublickeyType (1, 1); eMAID, EMAIDType (1, 1);
-struct iso2_CertificateInstallationResType {
+// Particle: ResponseCode, responseCodeType (1, 1); SAProvisioningCertificateChain, CertificateChainType (1, 1); ContractSignatureCertChain, CertificateChainType (1, 1); ContractSignatureEncryptedPrivateKey, ContractSignatureEncryptedPrivateKeyType (1, 1); DHpublickey, DiffieHellmanPublickeyType (1, 1); eMAID, EMAIDType (1, 1); RetryCounter, short (0, 1);
+struct iso2_CertificateUpdateResType {
     // ResponseCode, responseCodeType (base: string)
     iso2_responseCodeType ResponseCode;
     // SAProvisioningCertificateChain, CertificateChainType
@@ -2049,46 +1865,9 @@ struct iso2_CertificateInstallationResType {
     struct iso2_DiffieHellmanPublickeyType DHpublickey;
     // eMAID, EMAIDType (base: eMAIDType)
     struct iso2_EMAIDType eMAID;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PowerDeliveryRes; type={urn:iso:15118:2:2013:MsgBody}PowerDeliveryResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1); AC_EVSEStatus, AC_EVSEStatusType (0, 1); DC_EVSEStatus, DC_EVSEStatusType (0, 1); EVSEStatus, EVSEStatusType (0, 1);
-struct iso2_PowerDeliveryResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
-    // AC_EVSEStatus, AC_EVSEStatusType (base: EVSEStatusType)
-    struct iso2_AC_EVSEStatusType AC_EVSEStatus;
-    unsigned int AC_EVSEStatus_isUsed:1;
-    // DC_EVSEStatus, DC_EVSEStatusType (base: EVSEStatusType)
-    struct iso2_DC_EVSEStatusType DC_EVSEStatus;
-    unsigned int DC_EVSEStatus_isUsed:1;
-    // EVSEStatus, EVSEStatusType
-    struct iso2_EVSEStatusType EVSEStatus;
-    unsigned int EVSEStatus_isUsed:1;
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionSetupReq; type={urn:iso:15118:2:2013:MsgBody}SessionSetupReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: EVCCID, evccIDType (1, 1);
-struct iso2_SessionSetupReqType {
-    // EVCCID, evccIDType (base: hexBinary)
-    struct {
-        uint8_t bytes[iso2_evccIDType_BYTES_SIZE];
-        uint16_t bytesLen;
-    } EVCCID;
-
-
-};
-
-// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionRes; type={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
-//          abstract=False; final=False; derivation=extension;
-// Particle: ResponseCode, responseCodeType (1, 1);
-struct iso2_PaymentServiceSelectionResType {
-    // ResponseCode, responseCodeType (base: string)
-    iso2_responseCodeType ResponseCode;
+    // RetryCounter, short (base: int)
+    int16_t RetryCounter;
+    unsigned int RetryCounter_isUsed:1;
 
 };
 
@@ -2132,6 +1911,227 @@ struct iso2_CurrentDemandResType {
     // ReceiptRequired, boolean
     int ReceiptRequired;
     unsigned int ReceiptRequired_isUsed:1;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionSetupRes; type={urn:iso:15118:2:2013:MsgBody}SessionSetupResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); EVSEID, evseIDType (1, 1); EVSETimeStamp, long (0, 1);
+struct iso2_SessionSetupResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // EVSEID, evseIDType (base: string)
+    struct {
+        char characters[iso2_EVSEID_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } EVSEID;
+    // EVSETimeStamp, long (base: integer)
+    int64_t EVSETimeStamp;
+    unsigned int EVSETimeStamp_isUsed:1;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionReq; type={urn:iso:15118:2:2013:MsgBody}PaymentServiceSelectionReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: SelectedPaymentOption, paymentOptionType (1, 1); SelectedServiceList, SelectedServiceListType (1, 1);
+struct iso2_PaymentServiceSelectionReqType {
+    // SelectedPaymentOption, paymentOptionType (base: string)
+    iso2_paymentOptionType SelectedPaymentOption;
+    // SelectedServiceList, SelectedServiceListType
+    struct iso2_SelectedServiceListType SelectedServiceList;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PreChargeRes; type={urn:iso:15118:2:2013:MsgBody}PreChargeResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); DC_EVSEStatus, DC_EVSEStatusType (1, 1); EVSEPresentVoltage, PhysicalValueType (1, 1);
+struct iso2_PreChargeResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // DC_EVSEStatus, DC_EVSEStatusType (base: EVSEStatusType)
+    struct iso2_DC_EVSEStatusType DC_EVSEStatus;
+    // EVSEPresentVoltage, PhysicalValueType
+    struct iso2_PhysicalValueType EVSEPresentVoltage;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateInstallationReq; type={urn:iso:15118:2:2013:MsgBody}CertificateInstallationReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: Id, ID (1, 1); OEMProvisioningCert, certificateType (1, 1); ListOfRootCertificateIDs, ListOfRootCertificateIDsType (1, 1);
+struct iso2_CertificateInstallationReqType {
+    // Attribute: Id, ID (base: NCName)
+    struct {
+        char characters[iso2_Id_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } Id;
+    // OEMProvisioningCert, certificateType (base: base64Binary)
+    struct {
+        uint8_t bytes[iso2_certificateType_BYTES_SIZE];
+        uint16_t bytesLen;
+    } OEMProvisioningCert;
+
+    // ListOfRootCertificateIDs, ListOfRootCertificateIDsType
+    struct iso2_ListOfRootCertificateIDsType ListOfRootCertificateIDs;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}MeteringReceiptReq; type={urn:iso:15118:2:2013:MsgBody}MeteringReceiptReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: Id, ID (0, 1); SessionID, sessionIDType (1, 1); SAScheduleTupleID, SAIDType (0, 1); MeterInfo, MeterInfoType (1, 1);
+struct iso2_MeteringReceiptReqType {
+    // Attribute: Id, ID (base: NCName)
+    struct {
+        char characters[iso2_Id_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } Id;
+    unsigned int Id_isUsed:1;
+    // SessionID, sessionIDType (base: hexBinary)
+    struct {
+        uint8_t bytes[iso2_sessionIDType_BYTES_SIZE];
+        uint16_t bytesLen;
+    } SessionID;
+
+    // SAScheduleTupleID, SAIDType (base: unsignedByte)
+    uint8_t SAScheduleTupleID;
+    unsigned int SAScheduleTupleID_isUsed:1;
+    // MeterInfo, MeterInfoType
+    struct iso2_MeterInfoType MeterInfo;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PaymentDetailsRes; type={urn:iso:15118:2:2013:MsgBody}PaymentDetailsResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); GenChallenge, genChallengeType (1, 1); EVSETimeStamp, long (1, 1);
+struct iso2_PaymentDetailsResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // GenChallenge, genChallengeType (base: base64Binary)
+    struct {
+        uint8_t bytes[iso2_genChallengeType_BYTES_SIZE];
+        uint16_t bytesLen;
+    } GenChallenge;
+
+    // EVSETimeStamp, long (base: integer)
+    int64_t EVSETimeStamp;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CertificateUpdateReq; type={urn:iso:15118:2:2013:MsgBody}CertificateUpdateReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: Id, ID (1, 1); ContractSignatureCertChain, CertificateChainType (1, 1); eMAID, eMAIDType (1, 1); ListOfRootCertificateIDs, ListOfRootCertificateIDsType (1, 1);
+struct iso2_CertificateUpdateReqType {
+    // Attribute: Id, ID (base: NCName)
+    struct {
+        char characters[iso2_Id_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } Id;
+    // ContractSignatureCertChain, CertificateChainType
+    struct iso2_CertificateChainType ContractSignatureCertChain;
+    // eMAID, eMAIDType (base: string)
+    struct {
+        char characters[iso2_eMAID_CHARACTER_SIZE];
+        uint16_t charactersLen;
+    } eMAID;
+    // ListOfRootCertificateIDs, ListOfRootCertificateIDsType
+    struct iso2_ListOfRootCertificateIDsType ListOfRootCertificateIDs;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}CableCheckReq; type={urn:iso:15118:2:2013:MsgBody}CableCheckReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: DC_EVStatus, DC_EVStatusType (1, 1);
+struct iso2_CableCheckReqType {
+    // DC_EVStatus, DC_EVStatusType (base: EVStatusType)
+    struct iso2_DC_EVStatusType DC_EVStatus;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PowerDeliveryReq; type={urn:iso:15118:2:2013:MsgBody}PowerDeliveryReqType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ChargeProgress, chargeProgressType (1, 1); SAScheduleTupleID, SAIDType (1, 1); ChargingProfile, ChargingProfileType (0, 1); DC_EVPowerDeliveryParameter, DC_EVPowerDeliveryParameterType (0, 1); EVPowerDeliveryParameter, EVPowerDeliveryParameterType (0, 1);
+struct iso2_PowerDeliveryReqType {
+    // ChargeProgress, chargeProgressType (base: string)
+    iso2_chargeProgressType ChargeProgress;
+    // SAScheduleTupleID, SAIDType (base: unsignedByte)
+    uint8_t SAScheduleTupleID;
+    // ChargingProfile, ChargingProfileType
+    struct iso2_ChargingProfileType ChargingProfile;
+    unsigned int ChargingProfile_isUsed:1;
+    // DC_EVPowerDeliveryParameter, DC_EVPowerDeliveryParameterType (base: EVPowerDeliveryParameterType)
+    struct iso2_DC_EVPowerDeliveryParameterType DC_EVPowerDeliveryParameter;
+    unsigned int DC_EVPowerDeliveryParameter_isUsed:1;
+    // EVPowerDeliveryParameter, EVPowerDeliveryParameterType
+    struct iso2_EVPowerDeliveryParameterType EVPowerDeliveryParameter;
+    unsigned int EVPowerDeliveryParameter_isUsed:1;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}SessionStopRes; type={urn:iso:15118:2:2013:MsgBody}SessionStopResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1);
+struct iso2_SessionStopResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ChargeParameterDiscoveryRes; type={urn:iso:15118:2:2013:MsgBody}ChargeParameterDiscoveryResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); EVSEProcessing, EVSEProcessingType (1, 1); SAScheduleList, SAScheduleListType (0, 1); SASchedules, SASchedulesType (0, 1); AC_EVSEChargeParameter, AC_EVSEChargeParameterType (0, 1); DC_EVSEChargeParameter, DC_EVSEChargeParameterType (0, 1); EVSEChargeParameter, EVSEChargeParameterType (0, 1);
+struct iso2_ChargeParameterDiscoveryResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // EVSEProcessing, EVSEProcessingType (base: string)
+    iso2_EVSEProcessingType EVSEProcessing;
+    // SAScheduleList, SAScheduleListType (base: SASchedulesType)
+    struct iso2_SAScheduleListType SAScheduleList;
+    unsigned int SAScheduleList_isUsed:1;
+    // SASchedules, SASchedulesType
+    struct iso2_SASchedulesType SASchedules;
+    unsigned int SASchedules_isUsed:1;
+    // AC_EVSEChargeParameter, AC_EVSEChargeParameterType (base: EVSEChargeParameterType)
+    struct iso2_AC_EVSEChargeParameterType AC_EVSEChargeParameter;
+    unsigned int AC_EVSEChargeParameter_isUsed:1;
+    // DC_EVSEChargeParameter, DC_EVSEChargeParameterType (base: EVSEChargeParameterType)
+    struct iso2_DC_EVSEChargeParameterType DC_EVSEChargeParameter;
+    unsigned int DC_EVSEChargeParameter_isUsed:1;
+    // EVSEChargeParameter, EVSEChargeParameterType
+    struct iso2_EVSEChargeParameterType EVSEChargeParameter;
+    unsigned int EVSEChargeParameter_isUsed:1;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryRes; type={urn:iso:15118:2:2013:MsgBody}ServiceDiscoveryResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); PaymentOptionList, PaymentOptionListType (1, 1); ChargeService, ChargeServiceType (1, 1); ServiceList, ServiceListType (0, 1);
+struct iso2_ServiceDiscoveryResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // PaymentOptionList, PaymentOptionListType
+    struct iso2_PaymentOptionListType PaymentOptionList;
+    // ChargeService, ChargeServiceType (base: ServiceType)
+    struct iso2_ChargeServiceType ChargeService;
+    // ServiceList, ServiceListType
+    struct iso2_ServiceListType ServiceList;
+    unsigned int ServiceList_isUsed:1;
+
+};
+
+// Element: definition=complex; name={urn:iso:15118:2:2013:MsgBody}PowerDeliveryRes; type={urn:iso:15118:2:2013:MsgBody}PowerDeliveryResType; base type=BodyBaseType; content type=ELEMENT-ONLY;
+//          abstract=False; final=False; derivation=extension;
+// Particle: ResponseCode, responseCodeType (1, 1); AC_EVSEStatus, AC_EVSEStatusType (0, 1); DC_EVSEStatus, DC_EVSEStatusType (0, 1); EVSEStatus, EVSEStatusType (0, 1);
+struct iso2_PowerDeliveryResType {
+    // ResponseCode, responseCodeType (base: string)
+    iso2_responseCodeType ResponseCode;
+    // AC_EVSEStatus, AC_EVSEStatusType (base: EVSEStatusType)
+    struct iso2_AC_EVSEStatusType AC_EVSEStatus;
+    unsigned int AC_EVSEStatus_isUsed:1;
+    // DC_EVSEStatus, DC_EVSEStatusType (base: EVSEStatusType)
+    struct iso2_DC_EVSEStatusType DC_EVSEStatus;
+    unsigned int DC_EVSEStatus_isUsed:1;
+    // EVSEStatus, EVSEStatusType
+    struct iso2_EVSEStatusType EVSEStatus;
+    unsigned int EVSEStatus_isUsed:1;
 
 };
 
@@ -2328,11 +2328,11 @@ void init_iso2_X509DataType(struct iso2_X509DataType* X509DataType);
 void init_iso2_PGPDataType(struct iso2_PGPDataType* PGPDataType);
 void init_iso2_SPKIDataType(struct iso2_SPKIDataType* SPKIDataType);
 void init_iso2_SignedInfoType(struct iso2_SignedInfoType* SignedInfoType);
-void init_iso2_ProfileEntryType(struct iso2_ProfileEntryType* ProfileEntryType);
 void init_iso2_ParameterSetType(struct iso2_ParameterSetType* ParameterSetType);
+void init_iso2_SelectedServiceType(struct iso2_SelectedServiceType* SelectedServiceType);
+void init_iso2_ProfileEntryType(struct iso2_ProfileEntryType* ProfileEntryType);
 void init_iso2_SAScheduleTupleType(struct iso2_SAScheduleTupleType* SAScheduleTupleType);
 void init_iso2_ServiceType(struct iso2_ServiceType* ServiceType);
-void init_iso2_SelectedServiceType(struct iso2_SelectedServiceType* SelectedServiceType);
 void init_iso2_SignatureValueType(struct iso2_SignatureValueType* SignatureValueType);
 void init_iso2_SubCertificatesType(struct iso2_SubCertificatesType* SubCertificatesType);
 void init_iso2_KeyInfoType(struct iso2_KeyInfoType* KeyInfoType);
@@ -2341,68 +2341,68 @@ void init_iso2_SupportedEnergyTransferModeType(struct iso2_SupportedEnergyTransf
 void init_iso2_DC_EVStatusType(struct iso2_DC_EVStatusType* DC_EVStatusType);
 void init_iso2_BodyBaseType(struct iso2_BodyBaseType* BodyBaseType);
 void init_iso2_NotificationType(struct iso2_NotificationType* NotificationType);
-void init_iso2_DC_EVSEStatusType(struct iso2_DC_EVSEStatusType* DC_EVSEStatusType);
-void init_iso2_CertificateChainType(struct iso2_CertificateChainType* CertificateChainType);
 void init_iso2_EVSEStatusType(struct iso2_EVSEStatusType* EVSEStatusType);
+void init_iso2_DC_EVSEStatusType(struct iso2_DC_EVSEStatusType* DC_EVSEStatusType);
 void init_iso2_AC_EVSEStatusType(struct iso2_AC_EVSEStatusType* AC_EVSEStatusType);
-void init_iso2_PaymentOptionListType(struct iso2_PaymentOptionListType* PaymentOptionListType);
-void init_iso2_SelectedServiceListType(struct iso2_SelectedServiceListType* SelectedServiceListType);
-void init_iso2_SignatureType(struct iso2_SignatureType* SignatureType);
 void init_iso2_PhysicalValueType(struct iso2_PhysicalValueType* PhysicalValueType);
-void init_iso2_MeterInfoType(struct iso2_MeterInfoType* MeterInfoType);
-void init_iso2_ChargingProfileType(struct iso2_ChargingProfileType* ChargingProfileType);
+void init_iso2_CertificateChainType(struct iso2_CertificateChainType* CertificateChainType);
+void init_iso2_SelectedServiceListType(struct iso2_SelectedServiceListType* SelectedServiceListType);
+void init_iso2_ListOfRootCertificateIDsType(struct iso2_ListOfRootCertificateIDsType* ListOfRootCertificateIDsType);
+void init_iso2_PaymentOptionListType(struct iso2_PaymentOptionListType* PaymentOptionListType);
+void init_iso2_SignatureType(struct iso2_SignatureType* SignatureType);
 void init_iso2_ServiceParameterListType(struct iso2_ServiceParameterListType* ServiceParameterListType);
 void init_iso2_EVChargeParameterType(struct iso2_EVChargeParameterType* EVChargeParameterType);
-void init_iso2_AC_EVChargeParameterType(struct iso2_AC_EVChargeParameterType* AC_EVChargeParameterType);
 void init_iso2_DC_EVChargeParameterType(struct iso2_DC_EVChargeParameterType* DC_EVChargeParameterType);
+void init_iso2_AC_EVChargeParameterType(struct iso2_AC_EVChargeParameterType* AC_EVChargeParameterType);
+void init_iso2_ChargingProfileType(struct iso2_ChargingProfileType* ChargingProfileType);
 void init_iso2_SASchedulesType(struct iso2_SASchedulesType* SASchedulesType);
 void init_iso2_SAScheduleListType(struct iso2_SAScheduleListType* SAScheduleListType);
 void init_iso2_ChargeServiceType(struct iso2_ChargeServiceType* ChargeServiceType);
-void init_iso2_ListOfRootCertificateIDsType(struct iso2_ListOfRootCertificateIDsType* ListOfRootCertificateIDsType);
+void init_iso2_ContractSignatureEncryptedPrivateKeyType(struct iso2_ContractSignatureEncryptedPrivateKeyType* ContractSignatureEncryptedPrivateKeyType);
 void init_iso2_EVPowerDeliveryParameterType(struct iso2_EVPowerDeliveryParameterType* EVPowerDeliveryParameterType);
 void init_iso2_DC_EVPowerDeliveryParameterType(struct iso2_DC_EVPowerDeliveryParameterType* DC_EVPowerDeliveryParameterType);
-void init_iso2_ContractSignatureEncryptedPrivateKeyType(struct iso2_ContractSignatureEncryptedPrivateKeyType* ContractSignatureEncryptedPrivateKeyType);
 void init_iso2_EVSEChargeParameterType(struct iso2_EVSEChargeParameterType* EVSEChargeParameterType);
 void init_iso2_DC_EVSEChargeParameterType(struct iso2_DC_EVSEChargeParameterType* DC_EVSEChargeParameterType);
 void init_iso2_AC_EVSEChargeParameterType(struct iso2_AC_EVSEChargeParameterType* AC_EVSEChargeParameterType);
 void init_iso2_ServiceListType(struct iso2_ServiceListType* ServiceListType);
 void init_iso2_DiffieHellmanPublickeyType(struct iso2_DiffieHellmanPublickeyType* DiffieHellmanPublickeyType);
+void init_iso2_MeterInfoType(struct iso2_MeterInfoType* MeterInfoType);
 void init_iso2_EMAIDType(struct iso2_EMAIDType* EMAIDType);
 void init_iso2_MessageHeaderType(struct iso2_MessageHeaderType* MessageHeaderType);
-void init_iso2_WeldingDetectionReqType(struct iso2_WeldingDetectionReqType* WeldingDetectionReqType);
-void init_iso2_WeldingDetectionResType(struct iso2_WeldingDetectionResType* WeldingDetectionResType);
-void init_iso2_PreChargeReqType(struct iso2_PreChargeReqType* PreChargeReqType);
-void init_iso2_MeteringReceiptReqType(struct iso2_MeteringReceiptReqType* MeteringReceiptReqType);
-void init_iso2_CableCheckResType(struct iso2_CableCheckResType* CableCheckResType);
-void init_iso2_PowerDeliveryReqType(struct iso2_PowerDeliveryReqType* PowerDeliveryReqType);
-void init_iso2_SessionStopReqType(struct iso2_SessionStopReqType* SessionStopReqType);
-void init_iso2_SessionSetupResType(struct iso2_SessionSetupResType* SessionSetupResType);
-void init_iso2_CertificateUpdateResType(struct iso2_CertificateUpdateResType* CertificateUpdateResType);
-void init_iso2_CableCheckReqType(struct iso2_CableCheckReqType* CableCheckReqType);
-void init_iso2_ServiceDetailReqType(struct iso2_ServiceDetailReqType* ServiceDetailReqType);
-void init_iso2_PreChargeResType(struct iso2_PreChargeResType* PreChargeResType);
-void init_iso2_PaymentDetailsResType(struct iso2_PaymentDetailsResType* PaymentDetailsResType);
-void init_iso2_CurrentDemandReqType(struct iso2_CurrentDemandReqType* CurrentDemandReqType);
-void init_iso2_ServiceDetailResType(struct iso2_ServiceDetailResType* ServiceDetailResType);
-void init_iso2_SessionStopResType(struct iso2_SessionStopResType* SessionStopResType);
 void init_iso2_MeteringReceiptResType(struct iso2_MeteringReceiptResType* MeteringReceiptResType);
-void init_iso2_PaymentDetailsReqType(struct iso2_PaymentDetailsReqType* PaymentDetailsReqType);
-void init_iso2_ChargeParameterDiscoveryReqType(struct iso2_ChargeParameterDiscoveryReqType* ChargeParameterDiscoveryReqType);
-void init_iso2_ChargingStatusReqType(struct iso2_ChargingStatusReqType* ChargingStatusReqType);
-void init_iso2_ChargeParameterDiscoveryResType(struct iso2_ChargeParameterDiscoveryResType* ChargeParameterDiscoveryResType);
-void init_iso2_AuthorizationResType(struct iso2_AuthorizationResType* AuthorizationResType);
-void init_iso2_ServiceDiscoveryResType(struct iso2_ServiceDiscoveryResType* ServiceDiscoveryResType);
-void init_iso2_CertificateUpdateReqType(struct iso2_CertificateUpdateReqType* CertificateUpdateReqType);
-void init_iso2_ServiceDiscoveryReqType(struct iso2_ServiceDiscoveryReqType* ServiceDiscoveryReqType);
-void init_iso2_ChargingStatusResType(struct iso2_ChargingStatusResType* ChargingStatusResType);
-void init_iso2_CertificateInstallationReqType(struct iso2_CertificateInstallationReqType* CertificateInstallationReqType);
-void init_iso2_PaymentServiceSelectionReqType(struct iso2_PaymentServiceSelectionReqType* PaymentServiceSelectionReqType);
-void init_iso2_AuthorizationReqType(struct iso2_AuthorizationReqType* AuthorizationReqType);
-void init_iso2_CertificateInstallationResType(struct iso2_CertificateInstallationResType* CertificateInstallationResType);
-void init_iso2_PowerDeliveryResType(struct iso2_PowerDeliveryResType* PowerDeliveryResType);
 void init_iso2_SessionSetupReqType(struct iso2_SessionSetupReqType* SessionSetupReqType);
+void init_iso2_AuthorizationReqType(struct iso2_AuthorizationReqType* AuthorizationReqType);
+void init_iso2_CableCheckResType(struct iso2_CableCheckResType* CableCheckResType);
+void init_iso2_CurrentDemandReqType(struct iso2_CurrentDemandReqType* CurrentDemandReqType);
 void init_iso2_PaymentServiceSelectionResType(struct iso2_PaymentServiceSelectionResType* PaymentServiceSelectionResType);
+void init_iso2_ServiceDiscoveryReqType(struct iso2_ServiceDiscoveryReqType* ServiceDiscoveryReqType);
+void init_iso2_ServiceDetailReqType(struct iso2_ServiceDetailReqType* ServiceDetailReqType);
+void init_iso2_WeldingDetectionResType(struct iso2_WeldingDetectionResType* WeldingDetectionResType);
+void init_iso2_SessionStopReqType(struct iso2_SessionStopReqType* SessionStopReqType);
+void init_iso2_AuthorizationResType(struct iso2_AuthorizationResType* AuthorizationResType);
+void init_iso2_PreChargeReqType(struct iso2_PreChargeReqType* PreChargeReqType);
+void init_iso2_PaymentDetailsReqType(struct iso2_PaymentDetailsReqType* PaymentDetailsReqType);
+void init_iso2_WeldingDetectionReqType(struct iso2_WeldingDetectionReqType* WeldingDetectionReqType);
+void init_iso2_ServiceDetailResType(struct iso2_ServiceDetailResType* ServiceDetailResType);
+void init_iso2_ChargeParameterDiscoveryReqType(struct iso2_ChargeParameterDiscoveryReqType* ChargeParameterDiscoveryReqType);
+void init_iso2_CertificateInstallationResType(struct iso2_CertificateInstallationResType* CertificateInstallationResType);
+void init_iso2_ChargingStatusReqType(struct iso2_ChargingStatusReqType* ChargingStatusReqType);
+void init_iso2_ChargingStatusResType(struct iso2_ChargingStatusResType* ChargingStatusResType);
+void init_iso2_CertificateUpdateResType(struct iso2_CertificateUpdateResType* CertificateUpdateResType);
 void init_iso2_CurrentDemandResType(struct iso2_CurrentDemandResType* CurrentDemandResType);
+void init_iso2_SessionSetupResType(struct iso2_SessionSetupResType* SessionSetupResType);
+void init_iso2_PaymentServiceSelectionReqType(struct iso2_PaymentServiceSelectionReqType* PaymentServiceSelectionReqType);
+void init_iso2_PreChargeResType(struct iso2_PreChargeResType* PreChargeResType);
+void init_iso2_CertificateInstallationReqType(struct iso2_CertificateInstallationReqType* CertificateInstallationReqType);
+void init_iso2_MeteringReceiptReqType(struct iso2_MeteringReceiptReqType* MeteringReceiptReqType);
+void init_iso2_PaymentDetailsResType(struct iso2_PaymentDetailsResType* PaymentDetailsResType);
+void init_iso2_CertificateUpdateReqType(struct iso2_CertificateUpdateReqType* CertificateUpdateReqType);
+void init_iso2_CableCheckReqType(struct iso2_CableCheckReqType* CableCheckReqType);
+void init_iso2_PowerDeliveryReqType(struct iso2_PowerDeliveryReqType* PowerDeliveryReqType);
+void init_iso2_SessionStopResType(struct iso2_SessionStopResType* SessionStopResType);
+void init_iso2_ChargeParameterDiscoveryResType(struct iso2_ChargeParameterDiscoveryResType* ChargeParameterDiscoveryResType);
+void init_iso2_ServiceDiscoveryResType(struct iso2_ServiceDiscoveryResType* ServiceDiscoveryResType);
+void init_iso2_PowerDeliveryResType(struct iso2_PowerDeliveryResType* PowerDeliveryResType);
 void init_iso2_BodyType(struct iso2_BodyType* BodyType);
 void init_iso2_exiFragment(struct iso2_exiFragment* exiFrag);
 void init_iso2_xmldsigFragment(struct iso2_xmldsigFragment* xmldsigFrag);
