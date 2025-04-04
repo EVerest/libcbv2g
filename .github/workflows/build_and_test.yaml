@@ -16,7 +16,7 @@ on:
 jobs:
   ci:
     name: Build and Test
-    uses: everest/everest-ci/.github/workflows/continuous_integration.yml@v1.5.1
+    uses: everest/everest-ci/.github/workflows/continuous_integration.yml@bugfix/no-ssh-agent
     permissions:
       contents: read
     secrets:
